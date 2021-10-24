@@ -1,0 +1,131 @@
+
+program StringProgram;
+
+#include( "stdlib.hhf" );
+// The file cs17Final.hla is downloadable from the hyperlink shown above.
+// Place it in the same folder as this hla file you are working on
+
+#include( "cs17Final.hla" );
+
+static 
+
+stringData : dword;
+
+// TODO: CS 17 Students add code below to implement this function
+// Several hints are supplied
+
+procedure getLargest( stringData : dword ); @nodisplay; @noframe;
+static
+dReturnAddress : dword;
+dArrayBaseAddress : dword := 0;
+wDXRegister   : word := 0;   // preserve DX
+dEBXRegister  : dword := 0;   // preserve EBX
+wCXRegister  : word := 0; //perserve CX
+
+begin getLargest;
+// entry sequence
+// preserve registers used
+mov( EBX, dEBXRegister );
+mov( DX, wDXRegister );
+mov( CX, wCXRegister );
+pop( dReturnAddress );
+pop (EBX);
+push( dReturnAddress );
+ push(wDXRegister);
+ push(dEBXRegister);
+ push(wCXRegister);
+ 
+// begin sub-task
+
+	mov( 0, EAX);
+	mov( 0, ECX); 
+	mov( 0, DX );  
+	
+mov( [EBX], AL); //EAX = Largest
+
+WhileLp:
+WhileLpTermination:
+cmp( [EBX], DH ); 
+je WhileLpDone; // then end loop
+WhileLpBody:
+mov( [EBX], CL); // ECX = Letter 
+ifLEL:
+cmp( CL , AL);
+jg true1;
+jmp incI;
+endifLEL:
+
+incI:
+add(1, EBX); 
+jmp WhileLp;
+WhileLpDone:
+jmp ExitSeq;
+
+true1:
+mov(CL, AL);
+jmp incI;
+
+// leave the count in EAX
+
+ExitSeq:
+// restore the registers used
+pop(DX);
+pop(CX);
+pop(EBX);
+
+ret();
+
+end getLargest;
+
+ 
+begin StringProgram; 
+
+stdout.put( "Please enter a string to process", nl );
+
+// this code allocates a string of size 80
+
+mov( @size( int8 ), AL );
+mov( 80, BL );
+inc( BL );
+mul( BL );
+mov( 0, EBX );
+mov( AX, BX );
+malloc( EBX );
+mov( EAX, stringData );
+
+// let's try reading a value into the string
+mov( stringData, EAX );
+push( EAX );
+mov( 80, CX );
+push( CX );
+
+call gets;
+
+// print the string
+
+stdout.put( "----> here is the string you entered: " );
+
+mov( stringData, EAX );
+push( EAX );
+call puts;
+
+stdout.newln();
+
+// initialize EAX before calling the function.
+
+mov( 0, EAX );
+
+mov( stringData, EAX );
+push( EAX );
+
+// TODO: send a string parameter to the function
+
+call getLargest;
+
+
+// show the results
+stdout.put( "result = " );
+stdout.puti32( EAX );
+stdout.newln();
+
+end StringProgram;

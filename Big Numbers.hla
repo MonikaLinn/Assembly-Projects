@@ -1,0 +1,47 @@
+program BiggieNum
+
+#include ( "stdlib.hhf" ); 
+
+static 
+input: int8; //variable
+
+begin BiggieNum;
+
+stdout.put("Please enter a decimal value to use as n: ");
+stdin.get( input );
+
+stdout.put("The big number is: ");
+
+ForLp:
+InitializeForLp:
+mov(1, BL); //set to 1
+ForLpTerminationTest:
+cmp(BL, input);
+jg ForLpDone;
+ForLpBody:
+stdout.puti8(BL); //print
+
+ForLpIncrement: //increasing
+inc(BL);
+inc(BL);
+stdout.put(" ");
+jmp ForLpTerminationTest;
+ForLpDone:
+
+ForLp2:
+InitializeForLp2:
+mov(2, CL); //set to 2
+ForLpTerminationTest2:
+cmp(CL, input);
+jg ForLpDone2;
+ForLpBody2:
+stdout.puti8(CL); //print
+
+ForLpIncrement2: //increasing
+inc(CL);
+inc(CL);
+stdout.put(" ");
+jmp ForLpTerminationTest2;
+ForLpDone2:
+
+end BiggieNum;

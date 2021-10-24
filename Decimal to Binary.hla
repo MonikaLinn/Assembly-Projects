@@ -1,0 +1,58 @@
+program BinaryOutput
+
+#include ( "stdlib.hhf" )
+static
+number: int8; //variables
+
+begin BinaryOutput;
+stdout.put( " Please enter a decimal value to print: ");
+
+stdin.get( number ); //user input
+
+mov( number, BH);
+
+stdout.put( number, " into binary is " );
+
+	shl( 1, BH); //first shift
+	lahf();
+	and( %0000_0001, AH);
+	stdout.puti8(AH);
+
+	shl( 1, BH); //second shift
+	lahf();
+	and( %0000_0001, AH);
+	stdout.puti8(AH);
+
+	shl( 1, BH); //third shift
+	lahf();
+	and( %0000_0001, AH);
+	stdout.puti8(AH);
+
+	shl( 1, BH); //fourth shift
+	lahf();
+	and( %0000_0001, AH);
+	stdout.puti8(AH);
+	
+	stdout.put("_"); //udnerscore in the binary 
+
+	shl( 1, BH); //fifth shift
+	lahf();
+	and( %0000_0001, AH);
+	stdout.puti8(AH);
+
+	shl( 1, BH); //sixth shift
+	lahf();
+	and( %0000_0001, AH);
+	stdout.puti8(AH);
+
+	shl( 1, BH); //seventh shift
+	lahf();
+	and( %0000_0001, AH);
+	stdout.puti8(AH);	
+
+	shl( 1, BH); //eighth shift
+	lahf();
+	and( %0000_0001, AH);
+	stdout.puti8(AH);
+
+end BinaryOutput;

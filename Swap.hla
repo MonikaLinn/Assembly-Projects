@@ -1,0 +1,100 @@
+
+program swap;
+#include( "stdlib.hhf" );
+const
+nullchar : byte := 0;
+static
+
+iTemp : int16;
+dReturnAddress : dword;
+dEAXRegister : dword := 0; // preserve EAX
+dEDXRegister : dword := 0; // preserve EDX
+dECXRegister : dword := 0; // preserve ECX
+dEBXRegister : dword := 0; // preserve EBX
+
+iValue1 : int16 := 0; 
+iValue2 : int16 := 0;
+iValue3 : int16 := 0;
+
+procedure swapper( var x : int16; var y : int16; var z : int16 ); @nodisplay; @noframe;  
+begin swapper;
+
+	mov( EAX, dEAXRegister ); //perserve 
+	mov( EBX, dEBXRegister ); //perserve
+	mov( ECX, dECXRegister ); //perserve
+	mov( EDX, dEDXRegister ); //perserve
+	pop( dReturnAddress ); // This is the return address
+	pop( ECX ); //Z
+	pop( EBX ); //Y
+	pop( EAX ); //X
+	push( dReturnAddress );
+	push( dEAXRegister ); //perserve 
+	push( dEBXRegister ); //perserve
+	push( dECXRegister ); //perserve
+	push( dEDXRegister ); //perserve
+
+comp1:
+mov( [EBX], EDX ); 
+mov( DX, iTemp );
+mov( [EAX], EDX ); 
+cmp(DX , iTemp);
+jg swapper1;
+jmp comp2;
+
+swapper1:
+mov( DX, [EBX] ); 
+mov( iTemp, DX ); 
+mov( DX, [EAX] ); 
+
+comp2:
+mov([ECX] , EDX);
+mov( DX, iTemp ); 
+mov( [EBX], EDX );
+
+cmp(DX , iTemp);
+jg swapper2;
+jmp ExitSeq;
+
+swapper2:
+mov( DX, [ECX] ); 
+mov( iTemp, DX );
+mov( DX, [EBX] ); 
+jmp comp1;
+
+	
+ExitSeq:
+	pop( EAX );
+	pop( EBX );
+	pop( ECX );
+	pop( EDX );
+ret();
+end swapper;
+
+begin swap;
+
+stdout.put("Gimme X: ");
+stdin.get( iValue1 );
+stdout.put("Gimme Y: ");
+stdin.get( iValue2 );
+stdout.put("Gimme Z: ");
+stdin.get( iValue3 );
+
+lea( EAX, iValue1 ); // get address of iValue1
+push( EAX );
+
+lea( EAX, iValue2 ); // get address of iValue2
+push( EAX );
+
+lea( EAX, iValue3 ); // get addresss of iValue3
+push( EAX );
+
+call swapper;
+
+stdout.put("After Sorting, X = ");
+stdout.put(iValue1);
+stdout.put(", Y = ");
+stdout.put(iValue2);
+stdout.put(", Z = ");
+stdout.put(iValue3);
+
+end swap;

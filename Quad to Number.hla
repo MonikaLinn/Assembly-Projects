@@ -1,0 +1,47 @@
+program quad
+
+#include( "stdlib.hhf" );
+
+static 
+input: int32 := 0; //varibles
+double: int32 := 0;
+
+begin quad;
+stdout.put( "Please enter a starting number: ");
+
+stdin.get( input ); //user input
+
+mov( input, double );
+
+stdout.put(input, ": "); //user input
+rol(2, input);
+
+stdout.put(input, " ");
+rol(2, input);
+
+stdout.put(input, nl);
+
+ror(4, input); //rotates backwards
+add(1, input); //adds list number
+
+stdout.put(input, ": ");
+rol(2, input);
+
+stdout.put(input, " ");
+rol(2, input);
+
+stdout.put(input, nl);
+
+ror(4, input); //rotates backwards
+add(1, input);
+
+
+stdout.put(input, ": ");
+rol(2, input);
+
+stdout.put(input, " ");
+rol(2, input);
+
+stdout.put(input, nl);
+
+end quad;

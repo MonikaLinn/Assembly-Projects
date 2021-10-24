@@ -1,0 +1,183 @@
+program fees
+
+#include ("stdlib.hhf");
+
+static 
+zero: int32 :=0;
+
+begin fees ;
+
+stdout.put("Feed me (2 hex digits with bits prsseee): "); //input
+stdin.get(BL);
+
+mov(zero, EAX);
+mov(BL,DL);
+and( %0000_0011, DL );
+
+ifALequals01:
+cmp(DL, %0000_0001);
+je Winter;
+endifALequals01:
+
+ifALequals00:
+cmp(DL, %0000_0000);
+je Fall;
+endifALequals00:
+
+ifALequals10:
+cmp(DL, %0000_0010);
+je Spring;
+endifALequals10:
+
+ifALequals11:
+cmp(DL, %0000_0011);
+je Summer;
+endifALequals11:
+
+Fall:
+stdout.put("Fall Semester",nl);
+add(55, EAX); //Service Fees
+jmp Units;
+
+Spring:
+stdout.put("Spring Semester",nl);
+add(55, EAX); //Service Fees
+jmp Units;
+
+Winter:
+stdout.put("Winter Semester",nl);
+add(52, EAX); //Service Fees
+jmp Units;
+
+Summer:
+stdout.put("Summer Semester", nl);
+add(52, EAX); //Service Fees
+jmp Units;
+
+Units: //Loop for adding the units
+	ForLp:
+	mov(BL,DL);
+	and(%0000_1111, DL);
+	stdout.puti8(DL);
+	stdout.put( " units",nl);
+
+	ForLpTerminationTest:
+	cmp(DL,0);
+	jg ForLpDone;
+
+	ForLpDecrease:
+	dec(DL);
+
+	jmp ForLpTerminationTest;
+	ForLpDone:
+
+Resident: //Checking if they are residents
+mov(BL,DL);
+shr(6,DL);
+and(%0000_0001,DL);
+cmp(DL,1);
+je Res;
+jne NonResident;
+
+Res: //If they are
+stdout.put("CA Resident",nl);
+jmp ResidentFee;
+
+NonResident: //If they arent
+stdout.put("Non-Resident", nl);
+jmp NonResidentFee;
+
+ResidentFee: //Fee if you are a resident
+mov(46,ECX);
+add(ECX, EAX);
+
+ForLP1: //Looping for how many units they take
+	InitializeForLp:
+	mov(BL,DL);
+	and(%0000_1111, DL);
+
+	ForLpTerminationTest1:
+	cmp(DL, 1);
+	jng ForLpDone1;
+
+	ForLpBody1:
+	add(ECX, EAX);
+
+	ForLpDecrease1:
+	dec(DL);
+
+	jmp ForLpTerminationTest1;
+	ForLpDone1:
+jmp Parking;
+
+NonResidentFee: //Fee if you are not a resident
+mov(377, ECX);
+add(ECX, EAX);
+
+ForLP2: //Looping for how many units they take
+	InitializeForLp2:
+	mov(BL, DL);
+	and(%0000_1111, DL);
+
+	ForLpTerminationTest2:
+	cmp(DL, 1);
+	jng ForLpDone2;
+
+	ForLpBody2:
+	add(ECX, EAX);
+
+	ForLpDecrease2:
+	dec(DL);
+
+	jmp ForLpTerminationTest2;
+	ForLpDone2:
+jmp Parking;
+
+Parking: //Checking what semester to charge for parking
+	mov(BL, DL);
+	shr(4, DL);
+	and(%0000_0011, DL);
+	cmp(DL, %0000_0000); //Compare for Fall
+	je FallSpringP;
+	cmp(DL, %0000_0001); //Compare for Winter	
+	je WinterSummerParking;
+	cmp(DL, %0000_0010); //Compare for Spring
+	je FallSpringP;
+	cmp(DL, %0000_0011); //Compare for Summer
+	je WinterSummerParking;
+
+FallSpringP:
+mov( BL, DL);
+shr(7, DL);
+and(%0000_0001, DL);
+cmp(DL, 1);
+je ParkingFeeFandS;
+jne NoParking;
+
+WinterSummerParking:
+mov( BL, DL);
+shr(7, DL);
+and(%0000_0001, DL);
+cmp(DL, 1);
+je ParkingFeeWandS;
+jne NoParking;
+
+ParkingFeeFandS: //Parking Fee
+stdout.put("Parking",nl);
+add(85, EAX);
+jmp Total;
+
+ParkingFeeWandS: //Parking Fee
+stdout.put("Parking",nl);
+add(45, EAX);
+jmp Total;
+
+NoParking:
+stdout.put("No Parking", nl);
+jmp Total;
+	
+Total: //Total Amount of all the fees
+stdout.put("Total Fees = $");
+stdout.puti32(EAX);
+
+end fees;

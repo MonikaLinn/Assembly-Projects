@@ -1,0 +1,48 @@
+program count_up;
+#include ("stdlib.hhf");
+
+static
+startNum: int8;
+stopNum: int8;
+
+begin count_up;
+
+stdout.put("Gimme a decminal value to use as a start: ");
+stdin.get(startNum); //grabbing inputs
+stdout.put("Gimme a decminal value to use as a stop: ");
+stdin.get(stopNum); //grabbing inputs
+
+mov(startNum, AH); //storing the intial values
+mov(stopNum, BH); //storing the intial values
+
+mov(1, CH); //This is what we use to increment the numbers
+
+stdout.put(startNum); //We need to print the first number we were given 
+
+ForLp: 
+InitializeForLp:
+add(CH, AH); //Adding 1 to AH, (Your starting number)
+inc(CH); //Increasing CH by 1 equivelent is i++
+ForLpTerminationTest: //This is the termination test, the equivelent i < 0; 
+cmp(AH, BH); //This is comparing AH to BH and only jumping if AH is larger then BH
+ja ForLpDone; //This is your jump command. 
+ForLpBody: //Like C, its your looping body, happens everytime you call your loop till the conditions are met. 
+stdout.put("_"); //Required for the assignment to print out a _ after each number. 
+stdout.puti8( AH ); //Printing AH which is getting increased each loop. 
+
+ForLp2: //Second loop
+InitializeForLp2: //Dont even need this 
+ForLpBody2: //You want to add CH back AH each time because the first loop is used to print while the second loop is to add the increased CH to AH. 
+add(CH, AH);
+
+ForLpIncrement2: //This is whats increasing CH each loop. 
+inc(CH);
+
+ForLpIncrement: //No increment needed for the first loop because its used to print
+jmp ForLpTerminationTest; //Each time after the second loop itll jump immediately to the termination test, and if its met itll jump to ForLpDone:
+ForLpDone: //And since the loop terminates whenever AH is larger then BH itll stop before printing the larger number you need.
+stdout.put("_");
+stdout.puti8( AH ); //And since the loop already made CH larger and added it to AH, the new AH is already larger then BH, so all you need to do is print it. 
+
+
+end count_up;

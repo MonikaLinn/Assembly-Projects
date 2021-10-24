@@ -1,0 +1,86 @@
+program same
+
+#include( "stdlib.hhf" );
+static 
+	returnAddress : dword;
+	temp: int16;
+	iDataValue1 : int16 := 0;
+	iDataValue2 : int16 := 0;
+	iDataValue3 : int16 := 0;
+	iDataValue4 : int16 := 0;
+
+procedure theSame( w:int16; x:int16; y:int16; z:int16 ); @nodisplay; @noframe;
+
+begin theSame;
+	pop( returnAddress );
+	pop( w );		
+	pop( x );	
+	pop( y );
+	pop( z );
+	push( returnAddress );
+	push(DX);	
+
+mov(w, DX);
+
+cmp(DX , x);
+jne ReturnZero;
+
+cmp(DX , y);
+jne ReturnZero;
+
+cmp(DX , z);
+jne ReturnZero;
+jmp ReturnOne;
+
+ReturnZero: //return false
+mov(0, AL);
+jmp ExitSequence;
+
+ReturnOne:  //return true
+mov(1, AL);
+jmp ExitSequence;
+
+	ExitSequence:
+	pop(DX);
+	ret();
+
+end theSame;
+
+begin same;
+
+stdout.put("Feed me W: ");
+stdin.get(iDataValue1);
+push( iDataValue1 );
+
+
+stdout.put("Feed me X: ");
+stdin.get(iDataValue2);
+push( iDataValue2 );
+
+stdout.put("Feed me Y: ");
+stdin.get(iDataValue3);
+push( iDataValue3 );
+
+stdout.put("Feed me Z: ");
+stdin.get(iDataValue4);
+push( iDataValue4 );
+
+call theSame;
+
+cmp(AL, 1);
+je IsTrue;
+jmp IsFalse;
+
+IsTrue:
+stdout.put("Same. AL = ");
+stdout.puti8(AL);
+jmp EndProgram;
+
+IsFalse:
+stdout.put("Not the same. AL = ");
+stdout.puti8(AL);
+jmp EndProgram;
+
+EndProgram:
+
+end same;

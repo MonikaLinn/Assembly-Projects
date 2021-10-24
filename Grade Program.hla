@@ -1,0 +1,107 @@
+program grade
+
+#include( "stdlib.hhf" );
+static 
+	dataInput : real32;
+	returnAddress : real32;
+	gF: byte := $46; 
+	gD: byte := $44; 
+	gC: byte := $43; 
+	gB: byte := $42; 
+	gA: byte := $41; 
+	
+procedure grader( percentage : real32 ); @nodisplay; @noframe;
+
+begin grader;
+	pop( returnAddress );
+	pop( percentage );
+	push( returnAddress );
+
+finit();
+fld(percentage);
+fld(59.999);
+fcomp();
+fstsw( AX );
+sahf();
+setae( AL );
+cmp( AL, 1);
+je gradeF;
+
+fld(percentage);
+fld(69.999);
+fcomp();
+fstsw( AX );
+sahf();
+setae( AL );
+cmp( AL, 1);
+je gradeD;
+
+fld(percentage);
+fld(79.999);
+fcomp();
+fstsw( AX );
+sahf();
+setae( AL );
+cmp( AL, 1);
+je gradeC;
+
+fld(percentage);
+fld(89.999);
+fcomp();
+fstsw( AX );
+sahf();
+setae( AL );
+cmp( AL, 1);
+je gradeB;
+
+fld(percentage);
+fld(100.0);
+fcomp();
+fstsw( AX );
+sahf();
+setae( AL );
+cmp( AL, 1);
+je gradeA;
+
+gradeF:
+mov(gF, AL);
+jmp ExitSequence;
+
+gradeD:
+mov(gD, AL);
+jmp ExitSequence;
+
+gradeC:
+mov(gC, AL);
+jmp ExitSequence;
+
+gradeB:
+mov(gB, AL);
+jmp ExitSequence;
+
+gradeA:
+mov(gA, AL);
+jmp ExitSequence;
+
+	ExitSequence:
+	ret();
+
+end grader;
+
+begin grade;
+
+stdout.put("Let me calculate your grade!",nl);
+
+stdout.put("Feed me: ");
+stdin.get( dataInput );
+push( dataInput );
+
+call grader;
+stdout.put("that's the grade: ");
+stdout.putc( AL );
+
+jmp EndProgram;
+
+EndProgram:
+
+end grade;

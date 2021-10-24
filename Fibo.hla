@@ -1,0 +1,69 @@
+program fibo
+
+#include( "stdlib.hhf" );
+static 
+	
+	iDataValue1 : int8 := 0;
+	
+procedure fib( value : int8 ); @nodisplay; @noframe; 
+
+static 
+	returnAddress : dword;
+	padding: int16;
+	temp: int8 :=  0;
+	temp1: int8 := 0;
+
+begin fib;
+	pop( returnAddress );
+	pop(padding);
+	pop(padding);
+	mov(padding, BX);
+	mov(BL, value);
+	push( returnAddress );
+	push( CX );
+
+mov(2, temp);
+mov(1, AH); // fibo = 1
+mov(1, CH); //fiboprev = 1
+
+ForLp:
+ForLpTerminationTest:
+	cmp(temp, BL);
+	jnl ForLpDone;
+ForLpBody:
+ 	mov(AH, temp1); // temp1 = fibo AH 
+	add(CH, AH);
+	mov(temp1, CH);
+
+ForLpIncrement:
+	inc(temp);
+jmp ForLpTerminationTest;
+ForLpDone:
+
+	ExitSequence:
+	pop( CX );			
+	ret();
+
+end fib;
+
+begin fibo;
+
+stdout.put("Provide a number: ");
+stdin.get(iDataValue1);
+
+mov(0,BX);
+mov(iDataValue1, BL);
+push(BX);
+mov(0, BX);
+push(BX);
+
+call fib;
+
+stdout.put("fib(");
+stdout.puti8( BL );
+stdout.put(") = ");
+stdout.puti8(AH);
+
+EndProgram:
+
+end fibo;

@@ -1,0 +1,73 @@
+program solutiontwo
+
+#include( "stdlib.hhf" );
+
+static 
+I: int8 := 0; 
+J: int8 := 0; 
+K: int8 := 0;
+
+begin solutiontwo;
+
+stdout.put("Feed Me: ");
+stdin.get(DL);
+
+ForLp:
+InitializeForLp: 
+mov( 1, CL );
+ForLpTerminationTest: 
+cmp( CL, DL );
+jnle ForLpDone;
+ForLpBody: 
+stdout.puti8(CL);
+
+ForLp1:
+InitializeForLp1:
+mov(1, BL);
+ForLpTerminationTest1: 
+cmp( BL, CL);
+jnl ForLpDone1;
+ForLpBody1: 
+stdout.puti8(CL);
+
+ForLpIncrement1:
+inc( BL );
+jmp ForLpTerminationTest1;
+ForLpDone1:
+
+ForLpIncrement:
+inc( CL );
+jmp ForLpTerminationTest;
+ForLpDone:
+
+ForLp2:
+InitializeForLp2:
+mov(CL, AL);
+sub(2, AL);
+mov(AL, CL);
+ForLpTerminationTest2:
+cmp(CL, 1);
+jnge ForLpDone2;
+ForLpBody2:
+stdout.puti8(CL);
+
+ForLp3:
+InitializeForLp3:
+mov(1, BL);
+ForLpTerminationTest3: 
+cmp( BL, CL);
+jnl ForLpDone3;
+ForLpBody3: 
+stdout.puti8(CL);
+
+ForLpIncrement3:
+inc( BL );
+jmp ForLpTerminationTest3;
+ForLpDone3:
+
+ForLpIncrement2:
+dec( CL );
+jmp ForLpTerminationTest2;
+ForLpDone2:
+
+end solutiontwo;

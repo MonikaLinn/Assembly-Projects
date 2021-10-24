@@ -1,0 +1,87 @@
+program area
+
+#include( "stdlib.hhf" );
+static 
+	returnAddress : real32;
+	radius : real32 := 0;
+	height : real32 := 0;
+	z : real32 := 0;
+	x : real32 := 0;
+	y : real32 := 0;
+
+procedure surfaceFinder( r: real32; h : real32 ); @nodisplay; @noframe; 
+
+begin surfaceFinder;
+	pop( returnAddress );
+	pop( h );		
+	pop( r );
+	push( returnAddress );
+
+finit();
+fld(r);
+fld(st0);
+fmul();
+fldpi( );
+fld(4.0);
+fmul();
+fmul();
+fstp(z); //sphere
+
+fld(h);
+fld(st0);
+fmul();
+fld(6.0);
+fmul();
+fstp(x); //cube
+
+finit();
+fld(r);
+fld(h);
+fadd();
+fld(r);
+fmul();
+fld(2.0);
+fldpi();
+fmul();
+fmul();
+fstp(y); //cylinder
+
+
+jmp ExitSequence;
+
+	ExitSequence:
+	ret();
+
+end surfaceFinder;
+
+begin area;
+
+stdout.put("Lemme calculate the surface area of various things!",nl);
+
+stdout.put("Gimmie r: ");
+stdin.get(radius);
+push( radius );
+
+
+stdout.put("Gimmie h: ");
+stdin.get(height);
+push( height );
+
+call surfaceFinder;
+stdout.put("Surface Area of a sphere = ");
+stdout.putr32( z, 10, 5 );
+stdout.put(" square inches", nl);
+
+stdout.put("Surface Area of a cube = ");
+stdout.putr32( x, 10, 5 );
+stdout.put(" square inches", nl);
+
+stdout.put("Surface Area of a cylinder = ");
+stdout.putr32( y, 10, 5 );
+stdout.put(" square inches", nl);
+
+jmp EndProgram;
+
+EndProgram:
+
+end area;
